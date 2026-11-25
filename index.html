@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Innobiochips Lead Capture</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f7f9;--card:#fff;--tx:#14262e;--mut:#5f7480;--bd:#d5dfe5;--ac:#0a7d8c;--acx:#fff;--dg:#c0392b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a1f;--card:#18262d;--tx:#e8f1f4;--mut:#93a8b2;--bd:#2c4048;--ac:#3cc3d4;--acx:#07252b;--dg:#ff7b6b}}
+:root[data-theme="dark"]{--bg:#0f1a1f;--card:#18262d;--tx:#e8f1f4;--mut:#93a8b2;--bd:#2c4048;--ac:#3cc3d4;--acx:#07252b;--dg:#ff7b6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ac);color:var(--acx);display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+header h1{font-size:17px;margin:0}
+.tabs{display:flex;gap:6px}
+.tabs button{background:transparent;border:1px solid currentColor;color:inherit;border-radius:16px;padding:6px 12px;font-size:14px}
+.tabs button.on{background:var(--acx);color:var(--ac)}
+main{max-width:640px;margin:0 auto;padding:12px 12px 40px}
+section.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+h2{font-size:15px;margin:0 0 10px;color:var(--ac);text-transform:uppercase;letter-spacing:.04em}
+label.f{display:block;margin-bottom:10px;font-size:14px;color:var(--mut)}
+input[type=text],input[type=email],input[type=url],textarea{width:100%;margin-top:4px;padding:11px;font-size:16px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-family:inherit}
+textarea{min-height:90px}
+.hint{font-size:12px;color:var(--mut);display:block;margin-top:2px}
+.grp{font-size:14px;font-weight:600;margin:8px 0 6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{display:flex;align-items:center;gap:8px;border:1px solid var(--bd);border-radius:20px;padding:9px 13px;font-size:15px;background:var(--bg)}
+.opts label:has(input:checked){border-color:var(--ac);background:var(--ac);color:var(--acx)}
+.opts input{accent-color:var(--ac);width:18px;height:18px;margin:0}
+.col .opts{flex-direction:column}.col .opts label{border-radius:10px}
+button.p,button.s{font-size:16px;padding:13px 16px;border-radius:10px;border:1px solid var(--ac);width:100%;margin-top:8px}
+button.p{background:var(--ac);color:var(--acx);font-weight:600}
+button.s{background:transparent;color:var(--ac)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lead{border-bottom:1px solid var(--bd);padding:10px 0;display:flex;justify-content:space-between;gap:8px}
+.lead:last-child{border:0}
+.lead small{color:var(--mut);display:block}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;background:var(--ac);color:var(--acx);margin-top:3px}
+.del{background:none;border:0;color:var(--dg);font-size:14px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90%}
+#toast.show{opacity:1}
+.err{color:var(--dg);font-size:13px;display:none;margin-bottom:8px}
+.bk{position:sticky;top:calc(env(safe-area-inset-top,0px) + 50px);z-index:4;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:var(--card);border-bottom:1px solid var(--bd);font-size:13px;color:var(--mut)}
+.bk button{border:1px solid var(--ac);background:transparent;color:var(--ac);border-radius:16px;padding:7px 14px;font-size:14px;font-weight:600;white-space:nowrap}
+.bk.warn{background:var(--dg);color:#fff;border-color:var(--dg)}
+.bk.warn button{background:#fff;color:var(--dg);border-color:#fff}
+.th{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.th div{position:relative}.th img{width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)}
+.th button{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:0;background:var(--dg);color:#fff;font-size:14px;line-height:1;padding:0}
+[hidden]{display:none!important}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#0a7d8c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Leads">
+</head>
+<body>
+<header>
+  <h1>Innobiochips · Lead Capture</h1>
+  <div class="tabs"><button id="tF" class="on">Form</button><button id="tL">Leads (<span id="cnt">0</span>)</button></div>
+</header>
+<div class="bk" id="bk"><span id="bkT"></span><button id="bkB">Backup</button></div>
+<main>
+<div id="vF">
+<form id="frm" onsubmit="return false" autocomplete="off">
+  <div class="card" id="edB" hidden style="font-weight:600;color:var(--ac);padding:10px 14px">✏️ Editing a saved lead</div>
+  <section class="card">
+    <h2>Business card / Badge photo *</h2>
+    <div class="hint" style="margin:-6px 0 10px">Required: at least one photo</div>
+    <div class="row"><button class="p" id="addCam" type="button" style="margin-top:0">📷 Take photo</button><button class="s" id="addPh" type="button" style="margin-top:0">🖼 Gallery</button></div>
+    <input type="file" id="phCam" accept="image/*" capture="environment" hidden>
+    <input type="file" id="phIn" accept="image/*" multiple hidden>
+    <div class="th" id="th"></div>
+  </section>
+  <section class="card">
+    <h2>1. Contact Information</h2>
+    <div class="hint" style="margin:-6px 0 10px">Optional – the details are on the photo</div>
+    <div class="row">
+      <label class="f">First Name<input type="text" name="first" autocapitalize="words"></label>
+      <label class="f">Last Name<input type="text" name="last" autocapitalize="words"></label>
+    </div>
+    <label class="f">Job Title / Role<input type="text" name="title"><span class="hint">Helps identify decision makers, e.g. R&amp;D Director or Technician</span></label>
+    <label class="f">Company<input type="text" name="company"></label>
+    <label class="f">Email<input type="email" name="email" inputmode="email" autocapitalize="none"></label>
+    <label class="f">LinkedIn (Optional)<input type="text" name="linkedin" autocapitalize="none"><span class="hint">For quick follow-up by message</span></label>
+  </section>
+
+  <section class="card">
+    <h2>2. Business Qualification</h2>
+    <div class="grp">Main Interest * (check all that apply)</div>
+    <div class="opts col" data-g="interest">
+      <label><input type="checkbox" value="Omnys Platform (Instrument, Software, Consumables)">Omnys Platform (Instrument, Software, Consumables)</label>
+      <label><input type="checkbox" value="Custom Biochip Development / Services">Custom Biochip Development / Services</label>
+    </div>
+    <div class="grp" style="margin-top:16px">Domain of Interest * (check all that apply)</div>
+    <div class="opts" data-g="domains">
+      <label><input type="checkbox" value="Vaccines">Vaccines</label>
+      <label><input type="checkbox" value="Allergies">Allergies</label>
+      <label><input type="checkbox" value="Immunotherapies">Immunotherapies</label>
+      <label><input type="checkbox" value="Bioproduction / CDMO">Bioproduction / CDMO</label>
+      <label><input type="checkbox" value="Plasma Screening">Plasma Screening</label>
+      <label><input type="checkbox" value="Oncology / Tumors">Oncology / Tumors</label>
+      <label><input type="checkbox" value="Transfusions">Transfusions</label>
+      <label><input type="checkbox" value="Suppliers">Suppliers</label>
+      <label><input type="checkbox" value="Distributors">Distributors</label>
+      <label><input type="checkbox" value="Investors">Investors</label>
+      <label><input type="checkbox" value="Other" id="oth">Other</label>
+    </div>
+    <label class="f" id="othW" hidden style="margin-top:10px">Other (specify)<input type="text" name="other"></label>
+  </section>
+
+  <section class="card">
+    <h2>3. Follow-Up Strategy (Internal Use)</h2>
+    <div class="grp">Project Timeline / Urgency *</div>
+    <div class="opts col" data-r="timeline">
+      <label><input type="radio" name="timeline" value="Immediate (Active project)">Immediate (Active project)</label>
+      <label><input type="radio" name="timeline" value="Short-term (3-6 months)">Short-term (3-6 months)</label>
+      <label><input type="radio" name="timeline" value="Long-term / Just exploring">Long-term / Just exploring</label>
+    </div>
+    <div class="grp" style="margin-top:16px">Next Step Required * (check all that apply)</div>
+    <div class="opts col" data-g="next">
+      <label><input type="checkbox" value="Schedule a follow-up call">Schedule a follow-up call</label>
+      <label><input type="checkbox" value="Send specific brochure/info">Send specific brochure/info</label>
+      <label><input type="checkbox" value="Add to newsletter / CRM only">Add to newsletter / CRM only</label>
+    </div>
+    <label class="f" style="margin-top:16px">Notes / Specific Pain Points<textarea name="notes" placeholder="e.g. Currently using ELISA, wants to reduce turnaround time"></textarea></label>
+  </section>
+
+  <div class="err" id="err"></div>
+  <button class="p" id="save" type="button">Save lead</button>
+  <button class="s" id="clr" type="button">Clear form</button>
+</form>
+</div>
+
+<div id="vL" hidden>
+  <section class="card" id="inst" hidden><h2>Install the app</h2><p id="instT" style="margin:0 0 8px;font-size:14px;color:var(--mut)"></p><button class="s" id="instB" hidden style="margin:0">Install app</button></section>
+  <section class="card">
+    <h2>Export</h2>
+    <button class="p" id="bPdf">Share PDF (WhatsApp, mail, Teams…)</button>
+    <button class="s" id="bPdfD">Download PDF</button>
+    <button class="s" id="bCsv">Download CSV</button>
+    <button class="s" id="bCopy">Copy as table</button>
+    <button class="s" id="bDel" style="color:var(--dg);border-color:var(--dg)">Delete all leads</button>
+  </section>
+  <section class="card"><h2>Saved leads <span style="text-transform:none;font-weight:400;color:var(--mut)">(tap to view / edit)</span></h2><div id="list"></div></section>
+</div>
+</main>
+<div id="toast"></div>
+
+<script>
+(function(){
+var KEY="innobiochips_leads_v1";
+var COLS=[["timestamp","Date/Time"],["first","First Name"],["last","Last Name"],["title","Job Title / Role"],["company","Company"],["email","Email"],["linkedin","LinkedIn"],["interest","Main Interest"],["domains","Domain of Interest"],["timeline","Project Timeline"],["next","Next Step"],["notes","Notes / Pain Points"]];
+var BK=KEY+"_bk";var bk={n:0,t:""};try{bk=JSON.parse(localStorage.getItem(BK)||"{\"n\":0,\"t\":\"\"}")}catch(e){}
+var ph=[],editId=null,rev=0,pdfC=null;
+function sbk(){try{localStorage.setItem(BK,JSON.stringify(bk))}catch(e){}}
+var idb=null;
+function db(){return idb||(idb=new Promise(function(ok,no){var r=indexedDB.open("innobiochips",1);r.onupgradeneeded=function(){r.result.createObjectStore("photos")};r.onsuccess=function(){ok(r.result)};r.onerror=function(){no(r.error)}}))}
+function tx(m,f){return db().then(function(d){return new Promise(function(ok,no){var t=d.transaction("photos",m),q=f(t.objectStore("photos"));t.oncomplete=function(){ok(q&&q.result)};t.onerror=function(){no(t.error)}})})}
+function putPhotos(id,a){return tx("readwrite",function(s){return s.put(a,id)})}
+function getPhotos(id){return tx("readonly",function(s){return s.get(id)}).then(function(r){return r||[]})}
+function delPhotos(id){tx("readwrite",function(s){return s.delete(id)}).catch(function(){})}
+function clearPhotos(){tx("readwrite",function(s){return s.clear()}).catch(function(){})}
+var leads=[];
+try{leads=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){leads=[]}
+var $=function(s){return document.querySelector(s)};
+var frm=$("#frm");
+function persist(){rev++;try{localStorage.setItem(KEY,JSON.stringify(leads))}catch(e){}}
+function toast(m){var t=$("#toast");t.textContent=m;t.className="show";clearTimeout(toast.h);toast.h=setTimeout(function(){t.className=""},2200)}
+function pad(n){return (n<10?"0":"")+n}
+function stamp(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes())}
+function checked(g){return Array.prototype.map.call(document.querySelectorAll('[data-g="'+g+'"] input:checked'),function(i){return i.value})}
+function radio(n){var r=frm.querySelector('input[name="'+n+'"]:checked');return r?r.value:""}
+function val(n){return frm.elements[n].value.trim()}
+
+$("#oth").addEventListener("change",function(){$("#othW").hidden=!this.checked});
+
+function show(v){var f=v==="F";$("#vF").hidden=!f;$("#vL").hidden=f;$("#tF").className=f?"on":"";$("#tL").className=f?"":"on";if(!f)render();window.scrollTo(0,0)}
+$("#tF").onclick=function(){show("F")};$("#tL").onclick=function(){show("L")};
+
+function drawPh(){
+  draft();
+  $("#th").innerHTML=ph.map(function(u,i){return '<div><img src="'+u+'" alt=""><button type="button" data-p="'+i+'">×</button></div>'}).join("");
+}
+$("#th").addEventListener("click",function(e){var i=e.target.getAttribute("data-p");if(i!==null){ph.splice(+i,1);drawPh()}});
+$("#addPh").onclick=function(){$("#phIn").click()};$("#addCam").onclick=function(){$("#phCam").click()};
+function shrink(file){return new Promise(function(ok,no){
+  var u=URL.createObjectURL(file),im=new Image();
+  im.onload=function(){var k=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL("image/jpeg",0.72))};
+  im.onerror=function(){no()};im.src=u})}
+async function onPick(){
+  var fs=Array.prototype.slice.call(this.files);this.value="";
+  for(var i=0;i<fs.length;i++){try{ph.push(await shrink(fs[i]))}catch(e){toast("Could not read photo")}}
+  drawPh();
+}
+$("#phIn").addEventListener("change",onPick);$("#phCam").addEventListener("change",onPick);
+function fields(){return Array.prototype.slice.call(frm.querySelectorAll("input[type=text],input[type=email],textarea,input[type=checkbox],input[type=radio]"))}
+function snap(){return fields().map(function(f){return f.type==="checkbox"||f.type==="radio"?(f.checked?1:0):f.value})}
+function apply(a){fields().forEach(function(f,i){if(f.type==="checkbox"||f.type==="radio")f.checked=!!a[i];else f.value=a[i]||""});$("#othW").hidden=!$("#oth").checked}
+function isEmpty(){return !ph.length&&!snap().some(function(v){return v})}
+var dt;
+function draft(){clearTimeout(dt);dt=setTimeout(function(){if(isEmpty()&&!editId){delPhotos("__draft")}else{putPhotos("__draft",{v:snap(),p:ph,e:editId}).catch(function(){})}},400)}
+frm.addEventListener("input",draft);frm.addEventListener("change",draft);
+function edUI(){var e=!!editId;$("#edB").hidden=!e;$("#save").textContent=e?"Update lead":"Save lead";$("#clr").textContent=e?"Cancel editing":"Clear form"}
+function reset(){editId=null;edUI();ph=[];drawPh();frm.reset();$("#othW").hidden=true;$("#err").style.display="none"}
+$("#clr").onclick=function(){if(confirm(editId?"Cancel editing? Changes will be lost.":"Clear the form?"))reset()};
+async function editLead(i){
+  var l=leads[i];if(!l)return;
+  if(!isEmpty()&&!confirm("Replace what is currently in the form?"))return;
+  frm.reset();
+  ["first","last","title","company","email","linkedin","notes"].forEach(function(k){frm.elements[k].value=l[k]||""});
+  var d=(l.domains||"").split(" | "),o=d.filter(function(x){return x.indexOf("Other")===0})[0];
+  frm.elements.other.value=o?o.slice(7):"";if(o)d.push("Other");
+  function g(n,a){Array.prototype.forEach.call(document.querySelectorAll('[data-g="'+n+'"] input'),function(x){x.checked=a.indexOf(x.value)>-1})}
+  g("interest",(l.interest||"").split(" | "));g("next",(l.next||"").split(" | "));g("domains",d);
+  Array.prototype.forEach.call(frm.querySelectorAll('input[name="timeline"]'),function(x){x.checked=x.value===l.timeline});
+  $("#othW").hidden=!$("#oth").checked;
+  try{ph=l.pn?await getPhotos(l.id):[]}catch(e){ph=[]}
+  editId=l.id;edUI();drawPh();show("F");
+}
+
+$("#save").onclick=async function(){
+  var miss=[];
+  if(!ph.length)miss.push("Photo of business card / badge");
+  if(!checked("interest").length)miss.push("Main Interest");
+  if(!checked("domains").length)miss.push("Domain of Interest");
+  if(!radio("timeline"))miss.push("Project Timeline");
+  if(!checked("next").length)miss.push("Next Step");
+  if(miss.length){var e=$("#err");e.textContent="Required: "+miss.join(", ")+".";e.style.display="block";e.scrollIntoView({block:"center"});return}
+  var dom=checked("domains").map(function(d){return d==="Other"?("Other: "+val("other")).replace(/: $/,""):d});
+  var o={pn:ph.length,first:val("first"),last:val("last"),title:val("title"),company:val("company"),email:val("email"),linkedin:val("linkedin"),interest:checked("interest").join(" | "),domains:dom.join(" | "),timeline:radio("timeline"),next:checked("next").join(" | "),notes:val("notes")};
+  var ed=editId,ix=ed?leads.findIndex(function(x){return x.id===ed}):-1,id;
+  if(ix>-1){id=ed;o.id=id;o.timestamp=leads[ix].timestamp;leads[ix]=o;bk.e=1;sbk()}
+  else{id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);o.id=id;o.timestamp=stamp(new Date());leads.push(o)}
+  try{await putPhotos(id,ph)}catch(e){o.pn=0}
+  persist();reset();upd();
+  if(ix>-1){toast("Lead updated ✓");show("L")}
+  else{var pn=leads.length-bk.n;toast(pn>=5&&pn%5===0?"Lead saved – "+pn+" not backed up, tap Backup":"Lead saved ✓");window.scrollTo(0,0)}
+};
+
+function upd(){
+  $("#cnt").textContent=leads.length;
+  if(bk.n>leads.length){bk.n=leads.length;sbk()}
+  var p=leads.length-bk.n,pend=p>0||!!bk.e,b=$("#bk");
+  b.className="bk"+(p>=5?" warn":"");
+  $("#bkT").textContent=p>0?(p+" lead"+(p>1?"s":"")+" not backed up"+(p>=5?" – back up now!":"")):(bk.e?"Changes not backed up":(leads.length?"All leads backed up ✓"+(bk.t?" ("+bk.t+")":""):"No leads yet"));
+  $("#bkB").hidden=!pend;
+}
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function render(){
+  var h="";
+  if(!leads.length)h='<p style="color:var(--mut);margin:0">No leads yet.</p>';
+  leads.slice().reverse().forEach(function(l,i){
+    var idx=leads.length-1-i;
+    h+='<div class="lead" data-e="'+idx+'" style="cursor:pointer"><div><strong>'+esc((l.first+" "+l.last).trim()||l.company||("Lead "+l.timestamp))+'</strong><small>'+esc([l.title,l.company].filter(Boolean).join(" · "))+'</small>'+(l.next?'<span class="tag">'+esc(l.next)+'</span>':'')+(l.pn?' <span class="tag">📷 '+l.pn+'</span>':'')+'</div><button class="del" data-i="'+idx+'">Delete</button></div>';
+  });
+  $("#list").innerHTML=h;
+}
+$("#list").addEventListener("click",function(e){
+  var i=e.target.getAttribute("data-i");
+  if(i!==null){if(confirm("Delete this lead?")){delPhotos(leads[+i].id);leads.splice(+i,1);persist();upd();render()}return}
+  var r=e.target.closest(".lead");if(r)editLead(+r.getAttribute("data-e"));
+});
+$("#bDel").onclick=function(){if(leads.length&&confirm("Delete ALL leads? Export first if needed.")){clearPhotos();leads=[];bk={n:0,t:"",e:0};sbk();persist();upd();render()}};
+
+function csvCell(s){s=String(s==null?"":s);return /[";\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+function pNames(l,i){var a=[];for(var k=1;k<=(l.pn||0);k++)a.push("photos/"+pad(i+1)+"_"+k+".jpg");return a}
+function toCSV(){
+  var r=[COLS.map(function(c){return csvCell(c[1])}).join(";")];
+  leads.forEach(function(l,i){r.push(COLS.map(function(c){return csvCell(l[c[0]])}).join(";"))});
+  return "\ufeff"+r.join("\r\n");
+}
+function toTSV(){
+  var f=function(s){return String(s||"").replace(/[\t\r\n]+/g," ")};
+  var r=[COLS.map(function(c){return c[1]}).join("\t")];
+  leads.forEach(function(l){r.push(COLS.map(function(c){return f(l[c[0]])}).join("\t"))});
+  return r.join("\n");
+}
+function toText(){
+  return leads.map(function(l,i){
+    return (i+1)+". "+((l.first+" "+l.last).trim()||l.company||("Lead "+l.timestamp))+"\n"+COLS.slice(3).map(function(c){return l[c[0]]?"   "+c[1]+": "+l[c[0]]:""}).filter(Boolean).join("\n");
+  }).join("\n\n");
+}
+function need(){if(!leads.length){toast("No leads to export");return false}return true}
+
+function enc(s){var m={"’":39,"‘":39,"“":34,"”":34,"–":45,"—":45,"…":46,"€":128},o=[],t=String(s==null?"":s);for(var i=0;i<t.length;i++){var c=t.charCodeAt(i);o.push(m[t[i]]||((c>=32&&c<256)||c===10?c:63))}return new Uint8Array(o)}
+function pe(s){return String(s==null?"":s).replace(/[\r\n\t]+/g," ").replace(/[\\()]/g,"\\$&")}
+function b64(u){var t=atob(u.split(",")[1]),a=new Uint8Array(t.length);for(var i=0;i<t.length;i++)a[i]=t.charCodeAt(i);return a}
+function jdim(b){var i=2;while(i<b.length){if(b[i]!==255){i++;continue}var m=b[i+1];if(m>=192&&m<=207&&m!==196&&m!==200&&m!==204)return[(b[i+7]<<8)|b[i+8],(b[i+5]<<8)|b[i+6]];i+=2+((b[i+2]<<8)|b[i+3])}return[1,1]}
+function wrap(t,n){var out=[],cur="";String(t).split(/\s+/).forEach(function(w){while(w.length>n){if(cur){out.push(cur);cur=""}out.push(w.slice(0,n));w=w.slice(n)}if(!w)return;if(!cur)cur=w;else if((cur+" "+w).length>n){out.push(cur);cur=w}else cur+=" "+w});if(cur)out.push(cur);return out}
+function makePDF(items){
+  var objs=[],pages=[],P,Y,imgN=0;
+  function add(p){objs.push(p);return objs.length+4}
+  function np(){P={c:"",im:[]};pages.push(P);Y=800}
+  function tx(t,x,y,sz,bold,gr){P.c+="BT /F"+(bold?2:1)+" "+sz+" Tf "+(gr?"0.4 g ":"0 g ")+x+" "+y.toFixed(1)+" Td ("+pe(t)+") Tj ET\n"}
+  function img(p,x,y,w,h){var id=add(["<< /Type /XObject /Subtype /Image /Width "+p.d[0]+" /Height "+p.d[1]+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+p.b.length+" >>\nstream\n",p.b,"\nendstream"]),n="Im"+(++imgN);P.im.push("/"+n+" "+id+" 0 R");P.c+="q "+w.toFixed(1)+" 0 0 "+h.toFixed(1)+" "+x+" "+y.toFixed(1)+" cm /"+n+" Do Q\n"}
+  items.forEach(function(it){
+    np();tx(it.title,40,Y,15,1);Y-=16;tx(it.sub,40,Y,9,0,1);Y-=16;
+    var ps=it.photos.map(function(u){var b=b64(u);return{b:b,d:jdim(b)}}),one=ps.length===1,mw=one?420:250,mh=one?320:200,rh=0;
+    ps.forEach(function(p,j){
+      var k=Math.min(mw/p.d[0],mh/p.d[1]),w=p.d[0]*k,h=p.d[1]*k;
+      if(j%2===0&&j>0){Y-=rh+10;rh=0}
+      if(Y-h<50){np();rh=0}
+      img(p,40+(j%2)*265,Y-h,w,h);rh=Math.max(rh,h);
+    });
+    Y-=rh+14;
+    it.rows.forEach(function(r){
+      if(Y<80)np();
+      tx(r[0].toUpperCase(),40,Y,7.5,1,1);Y-=11;
+      wrap(r[1],95).forEach(function(t){if(Y<50)np();tx(t,40,Y,10);Y-=13});Y-=6;
+    });
+  });
+  var kids=[];
+  pages.forEach(function(p){var cb=enc(p.c),cid=add(["<< /Length "+cb.length+" >>\nstream\n",cb,"\nendstream"]);kids.push(add(["<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Contents "+cid+" 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> /XObject << "+p.im.join(" ")+" >> >> >>"])+" 0 R")});
+  var all=[["<< /Type /Catalog /Pages 2 0 R >>"],["<< /Type /Pages /Kids ["+kids.join(" ")+"] /Count "+kids.length+" >>"],["<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>"],["<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"]].concat(objs);
+  var parts=[],len=0,offs=[];
+  function put(x){var b=typeof x==="string"?enc(x):x;parts.push(b);len+=b.length}
+  put("%PDF-1.4\n");
+  all.forEach(function(o,i){offs.push(len);put((i+1)+" 0 obj\n");o.forEach(function(x){put(x)});put("\nendobj\n")});
+  var xr=len;put("xref\n0 "+(all.length+1)+"\n0000000000 65535 f \n");
+  offs.forEach(function(o){put(("0000000000"+o).slice(-10)+" 00000 n \n")});
+  put("trailer\n<< /Size "+(all.length+1)+" /Root 1 0 R >>\nstartxref\n"+xr+"\n%%EOF");
+  return new Blob(parts,{type:"application/pdf"});
+}
+async function buildPDF(){
+  var items=[];
+  for(var i=0;i<leads.length;i++){
+    var l=leads[i],ps=[];try{ps=l.pn?await getPhotos(l.id):[]}catch(e){}
+    items.push({title:"Lead "+(i+1)+" - "+((l.first+" "+l.last).trim()||l.company||"(no name)"),sub:l.timestamp,rows:COLS.slice(1).map(function(c){return[c[1],l[c[0]]]}).filter(function(r){return r[1]}),photos:ps});
+  }
+  return makePDF(items);
+}
+function dlBlob(b,name){var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},4000)}
+function markBk(){bk={n:leads.length,t:stamp(new Date()).slice(11),e:0};sbk();upd();toast("Backup done ✓")}
+async function exportPDF(share){
+  if(!need())return;
+  try{
+    if(!pdfC||pdfC.rev!==rev){toast("Building PDF…");pdfC={rev:rev,blob:await buildPDF()}}
+    var name="innobiochips-leads-"+stamp(new Date()).slice(0,10)+".pdf",f=new File([pdfC.blob],name,{type:"application/pdf"});
+    if(share&&navigator.canShare&&navigator.canShare({files:[f]})){
+      try{await navigator.share({files:[f],title:"Innobiochips leads"})}
+      catch(e){if(e&&e.name==="AbortError")return;if(e&&e.name==="NotAllowedError"){toast("PDF ready – tap the button again to share");return}throw e}
+    }else dlBlob(pdfC.blob,name);
+    markBk();
+  }catch(e){toast("Could not create the PDF")}
+}
+$("#bPdf").onclick=function(){exportPDF(true)};$("#bkB").onclick=function(){exportPDF(true)};$("#bPdfD").onclick=function(){exportPDF(false)};
+$("#bCsv").onclick=function(){if(need())dlBlob(new Blob([toCSV()],{type:"text/csv"}),"innobiochips-leads-"+stamp(new Date()).slice(0,10)+".csv")};
+function copy(t,m){
+  var done=function(){toast(m||"Table copied – paste into Excel/Sheets")};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fb)}else fb();
+  function fb(){var x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();try{document.execCommand("copy");done()}catch(e){toast("Copy not available")}x.remove()}
+}
+$("#bCopy").onclick=function(){if(need())copy(toTSV())};
+var dip=null,sa=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+if(!sa){$("#inst").hidden=false;$("#instT").textContent=/iphone|ipad|ipod/i.test(navigator.userAgent)?"On iPhone: in Safari tap the Share icon, then “Add to Home Screen”. From then on, always open the app from the Home icon.":"Tap “Install app” below, or use the browser menu ⋮ → “Install app” / “Add to Home screen”."}
+addEventListener("beforeinstallprompt",function(e){e.preventDefault();dip=e;$("#instB").hidden=false});
+$("#instB").onclick=function(){if(dip){dip.prompt();dip=null;$("#instB").hidden=true}};
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+getPhotos("__draft").then(function(d){if(d&&d.v){ph=d.p||[];editId=d.e||null;apply(d.v);edUI();drawPh()}}).catch(function(){});
+upd();
+})();
+</script>
+</body>
+</html>
